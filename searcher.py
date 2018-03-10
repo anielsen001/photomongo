@@ -16,13 +16,15 @@ class Searcher(object):
     search_text = None
 
     known_faces = None
+    known_texts = None
     
     def __init__(self,searchconfig):
 
         # searchconfig should be dict-like with sections
         try:
             searchtext = searchconfig['text']
-            self.search_test = searchtext
+            self.search_text = searchtext
+            self.initTextSearch()
         except KeyError:
             searchtext = None
 
@@ -116,7 +118,21 @@ class Searcher(object):
             matches += m_name
 
         # return matching names
-        return matches
-        
+        return matches 
+
+    def initTextSearch(self):
+
+        # parse the search text into a list of strings
+        known_texts = self.search_text.lower().strip().split()
+
+        self.known_texts = known_texts
 
     
+    def searchText(self,text):
+
+        match = []
+        for w in self.known_texts:
+            if w in text.lower():
+                match.append(w)
+
+        return match
