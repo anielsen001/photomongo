@@ -152,9 +152,15 @@ class TweetSearcher(Searcher):
     def searchTweet(self,tweet):
         """
         search a tweet for configured search parameters
-        tweet is a tweepy tweet object
+        tweet is a tweepy Status object or list of tweepy
+        status objects
         """
 
+        try:
+            m = [ self.searchTweet(_t) for _t in tweet ]
+        except TypeError:
+            pass
+            
         # search the text
         try:
             textmatch = Searcher.searchText(self,tweet.text)
@@ -164,9 +170,17 @@ class TweetSearcher(Searcher):
         # check if there is an extended_entities attribute which will
         # specifiy multiple media
         try:
-            media = tweet.extended_entities['media']
+            entities = tweet.extended_entities
         except AttributeError:
-            media = tweet.entities['media']
+            entities = tweet.entities
+
+        # extract the media from the entities
+        try:
+            media = entities['media']
+        except KeyError:
+            # no media key present, so no media to match
+            media = []
+            mediamatches = []
 
         # media is now a list of items we can parse for urls
         for m in media:
