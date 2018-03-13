@@ -158,6 +158,7 @@ class TweetSearcher(Searcher):
 
         try:
             m = [ self.searchTweet(_t) for _t in tweet ]
+            return m
         except TypeError:
             pass
             
