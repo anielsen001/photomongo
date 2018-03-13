@@ -6,6 +6,9 @@ searcher.py
 import glob
 import face_recognition
 import os
+import requests
+from PIL import Image
+import numpy as np
 
 class SearcherError(Exception):
     pass
@@ -136,3 +139,49 @@ class Searcher(object):
                 match.append(w)
 
         return match
+
+class TweetSearcher(Searcher):
+    """
+    a Class to parse tweets returned from tweepy and search for
+    photos, text, etc.
+    """
+
+    def __init__(self,searchconfig):
+        Searcher.__init__(self,searchconfig)
+
+    def searchTweet(self,tweet):
+        """
+        search a tweet for configured search parameters
+        tweet is a tweepy tweet object
+        """
+
+        # search the text
+        try:
+            textmatch = Searcher.searchText(self,tweet.text)
+        except AttributeError:
+            textmatch = Searcher.searchText(self,tweet.full_text)
+        
+        # check if there is an extended_entities attribute which will
+        # specifiy multiple media
+        try:
+            media = tweet.extended_entities['media']
+        except AttributeError:
+            media = tweet.entities['media']
+
+        # media is now a list of items we can parse for urls
+        for m in media:
+            # this assumes the media are photos
+            
+            url = m['media_url']
+            # this assumes an image - need to handle video
+            im = Image.open(requests.get(url, stream=True).raw)
+            npim = np.asarray(im)
+            npimc = npim.copy()
+
+            # find all known faces in this image
+            mediamatches = Searcher.searchPhoto(self,npimc)
+            
+            # save the image? 
+            # im.save('/home/apn/data/tweephoto2.jpg')
+            
+        return mediamatches+textmatch
