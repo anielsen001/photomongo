@@ -72,7 +72,10 @@ class Twitter(object):
 
         # get the first batch of tweets
         nThisTime = nToGet if nToGet <= nPerTry else nPerTry
-        new_tweets = self.api.user_timeline(screen_name = screen_name, count = nThisTime)
+        new_tweets = self.api.user_timeline(screen_name = screen_name,
+                                            count = nThisTime,
+                                            include_rts = True,
+                                            tweet_mode = 'extended' )
 
         print('Got ' + str(len(new_tweets)) + ' tweets ...')
         
@@ -97,7 +100,9 @@ class Twitter(object):
             
             new_tweets = self.api.user_timeline(screen_name = screen_name,
                                                 count = nThisTime,
-                                                max_id = oldest)
+                                                max_id = oldest,
+                                                include_rts = True,
+                                                tweet_mode='extended')
 
             print('Got ' + str(len(new_tweets)) + ' tweets ...')
                     
