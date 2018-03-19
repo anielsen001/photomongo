@@ -119,3 +119,18 @@ class Twitter(object):
 
         return alltweets
     
+    def getAllTweets(self):
+        """
+        get all the tweets possible for the current configuration
+
+        may take a while
+        """
+
+        alltweets=[]
+        
+        # loop over all the feeds in feeds_to_follow
+        for feed in self.feeds_to_follow:
+            feedtweets = self.getTweets(feed)
+            alltweets.extend(feedtweets)
+
+        return alltweets
