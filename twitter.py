@@ -17,6 +17,8 @@ class Twitter(object):
 
     feeds_to_follow = None
 
+    max_per_feed = None
+    
     # twitter api object
     api = None
     
@@ -36,6 +38,12 @@ class Twitter(object):
         follow_list = follow_str.strip().split()
         self.feeds_to_follow = follow_list
 
+        # set default max to get per feed
+        try:
+            self.max_per_feed = int(twitter_dict['max per feed'])
+        except KeyError:
+            self.max_per_feed = sys.maxsize
+            
     def openApi(self):
         """ open the twitter api """
 
@@ -50,7 +58,7 @@ class Twitter(object):
 
     def getTweets(self,
                   screen_name,
-                  nToGet = sys.maxsize):
+                  nToGet = None):
         """ 
         return tweets for screen name. currently get max possible which is
         3240. 
@@ -63,6 +71,9 @@ class Twitter(object):
 
         later, added tweets since date, other options
         """
+
+        if nToGet is None:
+            nToGet = self.max_per_feed
 
         alltweets = [] # list to hold tweet
         nGot = 0 # number of tweets retrieved
