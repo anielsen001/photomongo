@@ -213,12 +213,24 @@ class TweetSearcher(Searcher):
         except TypeError:
             pass
             
-        # search the text
         try:
-            textmatch = Searcher.searchText(self,tweet.text)
+            tweettext = tweet.text
         except AttributeError:
-            textmatch = Searcher.searchText(self,tweet.full_text)
-        
+            tweettext = tweet.full_text
+        else:
+            tweettext = ''
+
+        # should get empty list if no match
+        textmatch = Searcher.searchText(self,tweettext)
+
+        if textmatch:
+            print('found match in ' + tweettext)
+            # found a text match, write out the match as a text file
+            textMatchFile = os.path.sep.join(self.photo_match_dir,
+                                             'tweet_'+tweet.id_str + '.txt')
+            with open(textMatchFile,'w') as f:
+                f.write(tweettext)
+                
         # check if there is an extended_entities attribute which will
         # specifiy multiple media
         try:
