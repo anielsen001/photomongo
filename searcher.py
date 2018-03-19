@@ -7,8 +7,11 @@ import glob
 import face_recognition
 import os
 import requests
-from PIL import Image
+from PIL import Image, ImageDraw
 import numpy as np
+
+#import logging
+#logging.getLogger('searcher').addHandler(logging.NullHandler())
 
 class SearcherError(Exception):
     pass
@@ -18,7 +21,7 @@ class Searcher(object):
     known_photo = None
     search_text = None
 
-    known_faces = None
+    known_faces = None # filename, face encodings
     known_texts = None
     
     def __init__(self,searchconfig):
@@ -26,6 +29,7 @@ class Searcher(object):
         # searchconfig should be dict-like with sections
         try:
             searchtext = searchconfig['text']
+            #log.debug('searching for ' + searchtext)
             self.search_text = searchtext
             self.initTextSearch()
         except KeyError:
@@ -87,9 +91,13 @@ class Searcher(object):
         # put the known_faces into an attribute
         self.known_faces = known_faces
         
-    def searchPhoto(self,im):
+    def searchPhoto(self,
+                    im,
+                    drawMatchFace = False):
         """
         im has to be a numpy array, that is writable
+
+        drawMatchFace should be set to the name of a file to write
         """
 
         # check if known_faces features are ready
@@ -107,8 +115,12 @@ class Searcher(object):
         matches = []
 
         unknown_name = 'unknown'
+
+        if drawMatchFace:
+            pil_image = Image.fromarray(im)
+            draw = ImageDraw.Draw(pil_image)
         
-        for unknown_face in unknown_face_encodings:
+        for iunknown,unknown_face in enumerate(unknown_face_encodings):
             m = face_recognition.compare_faces(\
                     [ _kfe[1] for _kfe in self.known_faces ],\
                     unknown_face )
@@ -118,7 +130,32 @@ class Searcher(object):
                        if test[0] else unknown_name\
                        for test in zip(m,self.known_faces) ]
 
+            if drawMatchFace:
+                for _m in m_name:
+                    if _m is not unknown_name:
+                        print('drawing ' + _m)
+                        # draw a rectange around the matching face
+                        top,right,bottom,left = face_locations[iunknown]
+                        draw.rectangle( ( ( left,top ), ( right, bottom) ),
+                                        outline = (0, 0, 255) )
+
+                        # add a label below the rectange
+                        #text_width, text_height = draw.textsize(_m)
+                        #draw.rectangle(((left, bottom - text_height - 10),
+                        #                (right, bottom)),
+                        #               fill=(0, 0, 255),
+                        #               outline=(0, 0, 255))
+                        #draw.text((left + 6, bottom - text_height - 5),
+                        #          _m,
+                        #          fill=(255, 255, 255, 255))
+
+                
             matches += m_name
+
+        if drawMatchFace:
+            del draw
+            print('drawing ' + drawMatchFace)
+            pil_image.save(drawMatchFace)
 
         # return matching names
         return matches 
@@ -194,7 +231,8 @@ class TweetSearcher(Searcher):
             npimc = npim.copy()
 
             # find all known faces in this image
-            mediamatches = Searcher.searchPhoto(self,npimc)
+            mediamatches = Searcher.searchPhoto(self,npimc,
+                                                drawMatchFace = 'testdraw.jpg')
             
             # save the image? 
             # im.save('/home/apn/data/tweephoto2.jpg')
