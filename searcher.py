@@ -21,6 +21,8 @@ class Searcher(object):
     known_photo = None
     search_text = None
 
+    photo_match_dir = None
+
     known_faces = None # filename, face encodings
     known_texts = None
     
@@ -41,6 +43,12 @@ class Searcher(object):
             self.initPhotoSearch()
         except KeyError:
             searchphoto = None
+
+        try:
+            photo_match = searchconfig['photo match']
+            self.photo_match_dir = photo_match
+        except KeyError:
+            self.photo_match_dir = None
     
     def initPhotoSearch(self):
         # parse all the photos in the search photo dir and get search features
@@ -231,10 +239,13 @@ class TweetSearcher(Searcher):
             npimc = npim.copy()
 
             # find all known faces in this image
+            if self.photo_match_dir:
+                drawFaceName = os.path.sep.join([self.photo_match_dir,
+                                                 'tweet_' + tweet.id_str + '.jpg'])
+            else:
+                drawFaceName = False
+                
             mediamatches = Searcher.searchPhoto(self,npimc,
-                                                drawMatchFace = 'testdraw.jpg')
-            
-            # save the image? 
-            # im.save('/home/apn/data/tweephoto2.jpg')
-            
+                                                drawMatchFace = drawFaceName)
+                        
         return mediamatches+textmatch
