@@ -127,7 +127,10 @@ class Searcher(object):
         if drawMatchFace:
             pil_image = Image.fromarray(im)
             draw = ImageDraw.Draw(pil_image)
-        
+
+        # only set if we actually draw a rectange around a matched face
+        didDraw = False
+            
         for iunknown,unknown_face in enumerate(unknown_face_encodings):
             m = face_recognition.compare_faces(\
                     [ _kfe[1] for _kfe in self.known_faces ],\
@@ -142,6 +145,7 @@ class Searcher(object):
                 for _m in m_name:
                     if _m is not unknown_name:
                         print('drawing ' + _m)
+                        didDraw = True
                         # draw a rectange around the matching face
                         top,right,bottom,left = face_locations[iunknown]
                         draw.rectangle( ( ( left,top ), ( right, bottom) ),
@@ -160,7 +164,7 @@ class Searcher(object):
                 
             matches += m_name
 
-        if drawMatchFace:
+        if drawMatchFace and didDraw:
             del draw
             print('drawing ' + drawMatchFace)
             pil_image.save(drawMatchFace)
@@ -199,6 +203,8 @@ class TweetSearcher(Searcher):
         search a tweet for configured search parameters
         tweet is a tweepy Status object or list of tweepy
         status objects
+
+        returns a list of matches
         """
 
         try:
@@ -247,5 +253,6 @@ class TweetSearcher(Searcher):
                 
             mediamatches = Searcher.searchPhoto(self,npimc,
                                                 drawMatchFace = drawFaceName)
-                        
+
+        # returns a list of matches
         return mediamatches+textmatch
