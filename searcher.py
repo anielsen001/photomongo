@@ -226,8 +226,8 @@ class TweetSearcher(Searcher):
         if textmatch:
             print('found match in ' + tweettext)
             # found a text match, write out the match as a text file
-            textMatchFile = os.path.sep.join(self.photo_match_dir,
-                                             'tweet_'+tweet.id_str + '.txt')
+            textMatchFile = os.path.sep.join([self.photo_match_dir,
+                                              'tweet_'+tweet.id_str + '.txt'])
             with open(textMatchFile,'w') as f:
                 f.write(tweettext)
                 
