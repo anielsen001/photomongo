@@ -3,10 +3,13 @@
 photomongo - read and process all tweets possible
 
 Usage:
-  photomongo CONFIGFILE
+  photomongo CONFIGFILE [--pickle-to=<picklefile>] 
+  photomongo CONFIGFILE [--pickle-from=<picklefile>]
 
 Options:
   -h --help  Show this screen. 
+  --pickle-to=<picklefile>  file to save tweets.
+  --pickle-from=<picklefile>  file to read tweets.
 
 """
 
@@ -19,10 +22,30 @@ from searcher import Searcher
 import searcher
 from twitter import Twitter
 
+#from progress_bar import print_progress
+import progress_bar
+
+
+# to save/reload tweets use pickle
+import pickle
+
 if __name__=='__main__':
     
     args = docopt(__doc__)
 
+    try:
+        pickleFromFile = args['--pickle-from']
+    except KeyError:
+        pickleFromFile = None
+
+    try:
+        pickleToFile = args['--pickle-to']
+    except KeyError:
+        pickleToFile = None
+
+    print('pickleToFile = ' + str(pickleToFile))
+    print('pickleFromFile = ' + str(pickleFromFile))
+        
     # get the configuration file
     conf_file = args['CONFIGFILE']
 
@@ -37,22 +60,41 @@ if __name__=='__main__':
         print('Search configuration parameters not configured')
         raise
 
-    # require a twitter configuration
-    try:
-        twitconfig = config['twitter']
-    except KeyError:
-        print('Twitter not configured')
-        raise
-    
-    twit = Twitter(twitconfig)
+    # require a twitter configuration unless reading from an external file
+    if pickleFromFile:
+        # read tweets from pickle file instead of from twitter api
+        with open(pickleFromFile,'rb') as f:
+            alltweets = pickle.load(f)
+    else:
+        # read the tweets from twitter api directly
+        try:
+            twitconfig = config['twitter']
+        except KeyError:
+            print('Twitter not configured')
+            raise
 
-    # get all the tweets
-    alltweets = twit.getAllTweets()
+        twit = Twitter(twitconfig)
+
+        # get all the tweets
+        # alltweets will be a dict of lists
+        # each dict key is a followed twitter stream
+        alltweets = twit.getAllTweets()
+
+    # save the tweets if needed
+    if pickleToFile:
+        # write the tweets to a picklefile
+        with open(pickleToFile,'wb') as f:
+            pickle.dump(alltweets,f)
         
     # set up to search the tweets
     tweetsearcher = searcher.TweetSearcher(searchconf)
-
-    # search all the tweets
-    for tweet in alltweets:
-        tweetsearcher.searchTweet(tweet)
     
+    # search all the tweets
+    # https://stackoverflow.com/questions/952914/making-a-flat-list-out-of-list-of-lists-in-python
+    flatten = lambda l: [item for sublist in l for item in sublist]
+    totlen=0
+    for v in alltweets.values():
+        totlen += len(v)
+    for i,tweet in enumerate( flatten( alltweets.values() ) ):
+        tweetsearcher.searchTweet(tweet)
+        progress_bar.print_progress(i,totlen)
