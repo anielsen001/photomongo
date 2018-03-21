@@ -12,15 +12,33 @@ Options:
   --pickle-from=<picklefile>  file to read tweets.
 
 """
+import sys
+import logging
+logging.basicConfig(level=logging.DEBUG,
+                    handlers = [logging.FileHandler('photomongo.log')] ) 
 
-import os, sys
+log = logging.getLogger(__name__)
+
+
+#fh = logging.FileHandler('photomongo.log')
+#formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+#fh.setFormatter(formatter)
+#log.addHandler(fh)
+
+import os
 from docopt import docopt
 
 import configparser
 
-from searcher import Searcher
+#from searcher import Searcher
 import searcher
+#searcher.log.addHandler(fh)
+
 from twitter import Twitter
+#from twitter import log as twitlog
+#twitlog.addHandler(fh)
+
+
 
 #from progress_bar import print_progress
 import progress_bar
@@ -43,8 +61,8 @@ if __name__=='__main__':
     except KeyError:
         pickleToFile = None
 
-    print('pickleToFile = ' + str(pickleToFile))
-    print('pickleFromFile = ' + str(pickleFromFile))
+    log.debug('pickleToFile = ' + str(pickleToFile))
+    log.debug('pickleFromFile = ' + str(pickleFromFile))
         
     # get the configuration file
     conf_file = args['CONFIGFILE']
@@ -57,7 +75,7 @@ if __name__=='__main__':
     try:
         searchconf = config['search']
     except KeyError:
-        print('Search configuration parameters not configured')
+        log.exception('Search configuration parameters not configured')
         raise
 
     # require a twitter configuration unless reading from an external file
@@ -70,7 +88,7 @@ if __name__=='__main__':
         try:
             twitconfig = config['twitter']
         except KeyError:
-            print('Twitter not configured')
+            log.exception('Twitter not configured')
             raise
 
         twit = Twitter(twitconfig)

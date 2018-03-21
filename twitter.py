@@ -2,6 +2,9 @@
 twitter inferface code
 """
 
+import logging
+log = logging.getLogger(__name__)
+
 import sys
 import tweepy
 
@@ -88,7 +91,7 @@ class Twitter(object):
                                             include_rts = True,
                                             tweet_mode = 'extended' )
 
-        print('Got ' + str(len(new_tweets)) + ' tweets ...')
+        log.debug('Got ' + str(len(new_tweets)) + ' tweets ...')
         
         if len(new_tweets) == 0:
             # nothng returned - return empty list
@@ -105,9 +108,9 @@ class Twitter(object):
 
             # how many to get this time?
             nThisTime = nPerTry if (nToGet - nGot) > nPerTry else (nToGet - nGot)
-            print(nThisTime)
-            print(nToGet)
-            print(nGot)
+            #print(nThisTime)
+            #print(nToGet)
+            #print(nGot)
             
             new_tweets = self.api.user_timeline(screen_name = screen_name,
                                                 count = nThisTime,
@@ -115,7 +118,7 @@ class Twitter(object):
                                                 include_rts = True,
                                                 tweet_mode='extended')
 
-            print('Got ' + str(len(new_tweets)) + ' tweets ...')
+            log.debug('Got ' + str(len(new_tweets)) + ' tweets ...')
                     
             
             # if no tweets retuned, then we got the most

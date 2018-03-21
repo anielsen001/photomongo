@@ -2,6 +2,10 @@
 searcher.py
 
 """
+import sys
+import logging
+log = logging.getLogger(__name__)
+log.info('hello logging')
 
 import glob
 import face_recognition
@@ -10,8 +14,7 @@ import requests
 from PIL import Image, ImageDraw
 import numpy as np
 
-#import logging
-#logging.getLogger('searcher').addHandler(logging.NullHandler())
+
 
 class SearcherError(Exception):
     pass
@@ -28,6 +31,8 @@ class Searcher(object):
     
     def __init__(self,searchconfig):
 
+        log.debug('Creating Searcher')
+        
         # searchconfig should be dict-like with sections
         try:
             searchtext = searchconfig['text']
@@ -144,7 +149,7 @@ class Searcher(object):
             if drawMatchFace:
                 for _m in m_name:
                     if _m is not unknown_name:
-                        print('drawing ' + _m)
+                        log.debug('drawing ' + _m)
                         didDraw = True
                         # draw a rectange around the matching face
                         top,right,bottom,left = face_locations[iunknown]
@@ -166,7 +171,7 @@ class Searcher(object):
 
         if drawMatchFace and didDraw:
             del draw
-            print('drawing ' + drawMatchFace)
+            log.debug('drawing ' + drawMatchFace)
             pil_image.save(drawMatchFace)
 
         # return matching names
@@ -224,7 +229,7 @@ class TweetSearcher(Searcher):
         textmatch = Searcher.searchText(self,tweettext)
 
         if textmatch:
-            print('found match in ' + tweettext)
+            log.debug('found match in ' + tweettext)
             # found a text match, write out the match as a text file
             textMatchFile = os.path.sep.join([self.photo_match_dir,
                                               'tweet_'+tweet.id_str + '.txt'])
