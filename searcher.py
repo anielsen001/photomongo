@@ -259,7 +259,12 @@ class TweetSearcher(Searcher):
             # this assumes an image - need to handle video
             im = Image.open(requests.get(url, stream=True).raw)
             npim = np.asarray(im)
-            npimc = npim.copy()
+            
+            # if url points to a jpeg, everything is hunky dory
+            # if url points to a png, the image comesback with an alpha channel
+            # which needs to be removed, this is an issue in the dlib library, see:
+            # https://github.com/davisking/dlib/issues/128
+            npimc = npim[:, :, :3].copy()
 
             # find all known faces in this image
             if self.photo_match_dir:
