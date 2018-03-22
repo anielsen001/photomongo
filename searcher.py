@@ -111,6 +111,9 @@ class Searcher(object):
         im has to be a numpy array, that is writable
 
         drawMatchFace should be set to the name of a file to write
+
+        returns a list of names matching each ID'd face, or 'unknown' if
+        the face is unknown
         """
 
         # check if known_faces features are ready
@@ -122,6 +125,8 @@ class Searcher(object):
 
         # encode the faces
         # there may be multiple faces in the test image
+        # for each item in unknown_face_encodings, there is a corresponding
+        # face_locations, so a zip(unknown_face_encodings,face_locations) works
         unknown_face_encodings = face_recognition.face_encodings(im, face_locations)
 
         # test if the unknown face encodings match the known faces
@@ -137,19 +142,28 @@ class Searcher(object):
         didDraw = False
             
         for iunknown,unknown_face in enumerate(unknown_face_encodings):
+
+            # this whole logic is too tortured and confused with too many
+            # list comprehensions... blegh.
+            
+            # m is a list of True/False if the unknown_face matches a known
+            # face
             m = face_recognition.compare_faces(\
                     [ _kfe[1] for _kfe in self.known_faces ],\
                     unknown_face )
 
             # any True in m are a match
-            m_name = [ test[1][0]\
+            # m_name is a list of names or 'unknown' if no face/name is matched
+            # to the unknown face found in the image
+            # 
+            m_name = [ [ test[1][0] , face_locations[iunknown] ] \
                        if test[0] else unknown_name\
                        for test in zip(m,self.known_faces) ]
 
             if drawMatchFace:
                 for _m in m_name:
-                    if _m is not unknown_name:
-                        log.debug('drawing ' + _m)
+                    if _m[0] is not unknown_name:
+                        log.debug('drawing ' + _m[0])
                         didDraw = True
                         # draw a rectange around the matching face
                         top,right,bottom,left = face_locations[iunknown]
