@@ -19,6 +19,16 @@ import numpy as np
 class SearcherError(Exception):
     pass
 
+class SearchResult(object):
+    """
+    class to hold the result of a search
+    """
+
+    def __init__(self):
+        pass
+
+    
+
 class Searcher(object):
 
     known_photo = None
@@ -162,8 +172,9 @@ class Searcher(object):
 
             if drawMatchFace:
                 for _m in m_name:
-                    if _m[0] is not unknown_name:
-                        log.debug('drawing ' + _m[0])
+                    log.debug(str(_m))
+                    if _m is not unknown_name:
+                        log.debug('drawing ' + _m)
                         didDraw = True
                         # draw a rectange around the matching face
                         top,right,bottom,left = face_locations[iunknown]
@@ -185,7 +196,7 @@ class Searcher(object):
 
         if drawMatchFace and didDraw:
             del draw
-            log.debug('drawing ' + drawMatchFace)
+            log.debug('writing ' + drawMatchFace)
             pil_image.save(drawMatchFace)
 
         # return matching names
