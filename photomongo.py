@@ -3,15 +3,16 @@
 photomongo - read and process all tweets possible
 
 Usage:
-  photomongo CONFIGFILE [--pickle-to=<picklefile>] 
-  photomongo CONFIGFILE [--pickle-from=<picklefile>]
+  photomongo [options] CONFIGFILE
 
 Options:
   -h --help  Show this screen. 
   --pickle-to=<picklefile>  file to save tweets.
   --pickle-from=<picklefile>  file to read tweets.
+  --max=<number>  maximum number to process, primarily for debug
 
 """
+
 import sys
 import logging
 logging.basicConfig(level=logging.DEBUG,
@@ -60,6 +61,11 @@ if __name__=='__main__':
         pickleToFile = args['--pickle-to']
     except KeyError:
         pickleToFile = None
+
+    try:
+        maxCount = int(args['--max'])
+    except KeyError:
+        maxCount = None
 
     log.debug('pickleToFile = ' + str(pickleToFile))
     log.debug('pickleFromFile = ' + str(pickleFromFile))
@@ -110,9 +116,15 @@ if __name__=='__main__':
     # search all the tweets
     # https://stackoverflow.com/questions/952914/making-a-flat-list-out-of-list-of-lists-in-python
     flatten = lambda l: [item for sublist in l for item in sublist]
-    totlen=0
-    for v in alltweets.values():
-        totlen += len(v)
+
+    if not maxCount:
+        totlen=0
+        for v in alltweets.values():
+            totlen += len(v)
+    else:
+        totlen=maxCount
+
     for i,tweet in enumerate( flatten( alltweets.values() ) ):
         tweetsearcher.searchTweet(tweet)
         progress_bar.print_progress(i,totlen)
+        if i == totlen: break
