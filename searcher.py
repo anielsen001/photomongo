@@ -24,10 +24,28 @@ class SearchResult(object):
     class to hold the result of a search
     """
 
-    def __init__(self):
-        pass
-
+    reference = None # what was used to search for
+    match = None # item searched for reference
+    match_name = None # name of matching item, string
+    match_loc = None # location of matching item
     
+    def __init__(self,*args,**kwargs):
+
+        self.match_name = args[0]
+        self.match_loc = args[1]
+
+        try:
+            self.reference = kwargs['reference']
+        except KeyError:
+            pass
+
+        try:
+            self.match = kwargs['match']
+        except KeyError:
+            pass
+
+    def __str__(self):
+        return self.match_name
 
 class Searcher(object):
 
@@ -124,6 +142,8 @@ class Searcher(object):
 
         returns a list of names matching each ID'd face, or 'unknown' if
         the face is unknown
+
+        returns a list of SearchResults for each matched face or unknown
         """
 
         # check if known_faces features are ready
@@ -166,18 +186,22 @@ class Searcher(object):
             # m_name is a list of names or 'unknown' if no face/name is matched
             # to the unknown face found in the image
             # 
-            m_name = [ [ test[1][0] , face_locations[iunknown] ] \
-                       if test[0] else unknown_name\
+            m_name = [ SearchResult( test[1][0] , face_locations[iunknown] ) \
+                       if test[0] \
+                       else SearchResult( unknown_name, face_locations[iunknown] )\
                        for test in zip(m,self.known_faces) ]
 
             if drawMatchFace:
                 for _m in m_name:
                     log.debug(str(_m))
-                    if _m is not unknown_name:
-                        log.debug('drawing ' + _m)
+                    _m.reference = drawMatchFace
+                    if _m.match_name is not unknown_name:
+                        _m.reference = drawMatchFace
+                        log.debug('drawing ' + str(_m))
                         didDraw = True
                         # draw a rectange around the matching face
-                        top,right,bottom,left = face_locations[iunknown]
+                        top,right,bottom,left = _m.match_loc
+                        #face_locations[iunknown]
                         draw.rectangle( ( ( left,top ), ( right, bottom) ),
                                         outline = (0, 0, 255) )
 
@@ -213,9 +237,9 @@ class Searcher(object):
     def searchText(self,text):
 
         match = []
-        for w in self.known_texts:
+        for i,w in enumerate(self.known_texts):
             if w in text.lower():
-                match.append(w)
+                match.append( SearchResult(w, i) )
 
         return match
 
@@ -228,6 +252,15 @@ class TweetSearcher(Searcher):
     def __init__(self,searchconfig):
         Searcher.__init__(self,searchconfig)
 
+    def searchPhoto(self,
+                    im,
+                    drawMatchFace = True):
+        
+        # get search result from photoSearch base class
+        sr = super().searchPhoto(im,drawMatchFace=drawMatchFace)
+
+        return sr
+        
     def searchTweet(self,tweet):
         """
         search a tweet for configured search parameters
