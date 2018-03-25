@@ -255,10 +255,14 @@ class TweetSearcher(Searcher):
     def searchPhoto(self,
                     im,
                     tweet,
-                    drawMatchFace = True):
+                    drawMatchFace = False):
         
         # get search result from photoSearch base class
         sr = super().searchPhoto(im,drawMatchFace=drawMatchFace)
+
+        # add some metaata to the search results
+        for r in sr:
+            r.reference = tweet
 
         return sr
         
