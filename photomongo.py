@@ -124,7 +124,8 @@ if __name__=='__main__':
     else:
         totlen=maxCount
 
+    searchresults = []
     for i,tweet in enumerate( flatten( alltweets.values() ) ):
-        tweetsearcher.searchTweet(tweet)
+        searchresults.extend( tweetsearcher.searchTweet(tweet) )
         progress_bar.print_progress(i,totlen)
         if i == totlen: break
