@@ -254,6 +254,7 @@ class TweetSearcher(Searcher):
 
     def searchPhoto(self,
                     im,
+                    tweet,
                     drawMatchFace = True):
         
         # get search result from photoSearch base class
@@ -331,8 +332,9 @@ class TweetSearcher(Searcher):
             else:
                 drawFaceName = False
                 
-            mediamatches = Searcher.searchPhoto(self,npimc,
-                                                drawMatchFace = drawFaceName)
+            mediamatches = self.searchPhoto( npimc,
+                                             tweet,
+                                             drawMatchFace = drawFaceName)
 
         # returns a list of matches
         return mediamatches+textmatch
