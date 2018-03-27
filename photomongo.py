@@ -41,7 +41,7 @@ from twitter import Twitter
 #from twitter import log as twitlog
 #twitlog.addHandler(fh)
 
-
+from gmail import Gmail
 
 #from progress_bar import print_progress
 import progress_bar
@@ -79,6 +79,21 @@ if __name__=='__main__':
     config = configparser.ConfigParser()
     config.read(conf_file)
 
+    # check if gmail is configured
+    try:
+        gmailconf = config['gmail']
+    except KeyError:
+        # gmail not configure
+        log.info('gmail not configured, emails will not be sent')
+
+    try:
+        gm = Gmail(gmailconf)
+    except:
+        # gmail configuration error
+        log.error('gmail configuration error')
+        raise
+        
+        
     # require a 'search' section in the config file know what to search fo
     try:
         searchconf = config['search']
