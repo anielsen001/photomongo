@@ -31,6 +31,8 @@ from docopt import docopt
 
 import configparser
 
+import json
+
 #from searcher import Searcher
 import searcher
 #searcher.log.addHandler(fh)
@@ -84,6 +86,15 @@ if __name__=='__main__':
         log.exception('Search configuration parameters not configured')
         raise
 
+    # check if configured to write out save file
+    try:
+        results_save_file = searchconf['save results file']
+        log.info('Will save search results to: ' + results_save_file)
+    except KeyError:
+        results_save_file = None
+        log.info('No configured file for search results')
+
+
     # require a twitter configuration unless reading from an external file
     if pickleFromFile:
         # read tweets from pickle file instead of from twitter api
@@ -129,3 +140,11 @@ if __name__=='__main__':
         searchresults.extend( tweetsearcher.searchTweet(tweet) )
         progress_bar.print_progress(i,totlen)
         if i == totlen: break
+
+    # save the search results
+    # broken, cant' save custom objects
+    #if results_save_file:
+    #    with open(results_save_file,'w') as f:
+    #        json.dump(searchresults,f)
+
+            
