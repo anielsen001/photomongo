@@ -140,9 +140,6 @@ class Searcher(object):
 
         drawMatchFace should be set to the name of a file to write
 
-        returns a list of names matching each ID'd face, or 'unknown' if
-        the face is unknown
-
         returns a list of SearchResults for each matched face or unknown
         """
 
@@ -262,7 +259,9 @@ class TweetSearcher(Searcher):
 
         # add some metaata to the search results
         for r in sr:
+            r.filename = r.reference
             r.reference = tweet
+            
 
         return sr
         
