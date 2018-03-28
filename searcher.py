@@ -14,7 +14,7 @@ import requests
 from PIL import Image, ImageDraw
 import numpy as np
 
-
+import json
 
 class SearcherError(Exception):
     pass
@@ -182,11 +182,17 @@ class Searcher(object):
             # any True in m are a match
             # m_name is a list of names or 'unknown' if no face/name is matched
             # to the unknown face found in the image
-            # 
+            #
+            # this returned a results for all matches, including 'unknown'
+            #m_name = [ SearchResult( test[1][0] , face_locations[iunknown] ) \
+            #           if test[0] \
+            #           else SearchResult( unknown_name, face_locations[iunknown] )\
+            #           for test in zip(m,self.known_faces) ]
+
+            # this returns a result only for known matches
             m_name = [ SearchResult( test[1][0] , face_locations[iunknown] ) \
-                       if test[0] \
-                       else SearchResult( unknown_name, face_locations[iunknown] )\
-                       for test in zip(m,self.known_faces) ]
+                       for test in zip(m,self.known_faces)\
+                       if test[0] ]
 
             if drawMatchFace:
                 for _m in m_name:
@@ -257,11 +263,24 @@ class TweetSearcher(Searcher):
         # get search result from photoSearch base class
         sr = super().searchPhoto(im,drawMatchFace=drawMatchFace)
 
-        # add some metaata to the search results
-        for r in sr:
-            r.filename = r.reference
-            r.reference = tweet
-            
+        if sr:
+            for_json=dict()
+            for_json['tweet']=tweet._json
+            for_json['image_file'] = sr[0].reference
+            for_json['match_locs'] = []
+            for_json['match_name'] = []
+
+            # add some metaata to the search results
+            for r in sr:
+                r.filename = r.reference
+                r.reference = tweet
+                for_json['match_locs'].extend(r.match_loc)
+                for_json['match_name'].extend(r.match_name)
+
+            # build a json file for this image to save with the image file
+            jsonfile = os.path.splitext(drawMatchFace)[0] + '.json'
+            with open(jsonfile,'w') as f:
+                json.dump(for_json,f)
 
         return sr
         
