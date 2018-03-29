@@ -88,6 +88,7 @@ if __name__=='__main__':
 
     try:
         gm = Gmail(gmailconf)
+        log.info('gmail configured')
     except:
         # gmail configuration error
         log.error('gmail configuration error')
@@ -157,6 +158,10 @@ if __name__=='__main__':
         searchresults.extend( tweetsearcher.searchTweet(tweet) )
         progress_bar.print_progress(i,totlen)
         if i == totlen: break
+
+    # send email if search results come back
+    gm.create_and_send_message('photomongo results to review',\
+                               'found results')
 
     # save the search results
     # broken, cant' save custom objects
