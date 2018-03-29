@@ -274,8 +274,8 @@ class TweetSearcher(Searcher):
             for r in sr:
                 r.filename = r.reference
                 r.reference = tweet
-                for_json['match_locs'].extend(r.match_loc)
-                for_json['match_name'].extend(r.match_name)
+                for_json['match_locs'].append(r.match_loc)
+                for_json['match_name'].append(r.match_name)
 
             # build a json file for this image to save with the image file
             jsonfile = os.path.splitext(drawMatchFace)[0] + '.json'
