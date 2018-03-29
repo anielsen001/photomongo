@@ -143,3 +143,13 @@ class Gmail(object):
       except errors.HttpError:
         print('An error occurred')
         raise
+
+    def create_and_send_message(self,subject,message_text):
+
+        """ combine create and send message methods """
+
+        msg = self.create_message(subject,message_text)
+        self.send_message(msg)
+
+        
+        
