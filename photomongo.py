@@ -10,6 +10,7 @@ Options:
   --pickle-to=<picklefile>  file to save tweets.
   --pickle-from=<picklefile>  file to read tweets.
   --max=<number>  maximum number to process, primarily for debug
+  --since=<days>  maximum number of days to get in the past
 
 """
 
@@ -66,9 +67,14 @@ if __name__=='__main__':
 
     try:
         maxCount = int(args['--max'])
-    except KeyError:
+    except ( KeyError, TypeError ):
         maxCount = None
 
+    try:
+        sinceDays = int(args['--since'])
+    except KeyError:
+        sinceDays = None
+        
     log.debug('pickleToFile = ' + str(pickleToFile))
     log.debug('pickleFromFile = ' + str(pickleFromFile))
         
@@ -93,7 +99,6 @@ if __name__=='__main__':
         # gmail configuration error
         log.error('gmail configuration error')
         raise
-        
         
     # require a 'search' section in the config file know what to search fo
     try:
@@ -144,29 +149,36 @@ if __name__=='__main__':
     # https://stackoverflow.com/questions/952914/making-a-flat-list-out-of-list-of-lists-in-python
     flatten = lambda l: [item for sublist in l for item in sublist]
 
+    # convert all tweets to a list if needed
+    try:
+        # assume a dictionary
+        alltweets = flatten( alltweets.values() )
+    except AttributeError:
+        # assume it's a list
+        pass
+
+    
     if not maxCount:
-        totlen=0
-        for v in alltweets.values():
-            totlen += len(v)
+        totlen = len(alltweets)
+        #for v in alltweets.values():
+        #    totlen += len(v)
     else:
-        totlen=maxCount
+        totlen = maxCount
 
     searchresults = []
     
-    for i,tweet in enumerate( flatten( alltweets.values() ) ):
+    for i,tweet in enumerate( alltweets ):
         # this searches on tweet at a time
         searchresults.extend( tweetsearcher.searchTweet(tweet) )
         progress_bar.print_progress(i,totlen)
         if i == totlen: break
 
     # send email if search results come back
-    gm.create_and_send_message('photomongo results to review',\
-                               'found results')
-
-    # save the search results
-    # broken, cant' save custom objects
-    #if results_save_file:
-    #    with open(results_save_file,'w') as f:
-    #        json.dump(searchresults,f)
+    if searchresults:
+        gm.create_and_send_message('photomongo results to review',\
+                                   'found results')
+    else:
+        gm.create_and_send_message('photomongo no results',\
+                                   'no results')
 
             
