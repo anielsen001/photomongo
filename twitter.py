@@ -8,6 +8,8 @@ log = logging.getLogger(__name__)
 import sys
 import tweepy
 
+import datetime
+
 class TwitterError(object):
     pass
 
@@ -61,7 +63,9 @@ class Twitter(object):
 
     def getTweets(self,
                   screen_name,
-                  nToGet = None):
+                  nToGet = None,
+                  start_date = None,
+                  end_date = None):
         """ 
         return tweets for screen name. currently get max possible which is
         3240. 
@@ -72,7 +76,9 @@ class Twitter(object):
 
         returns a list of all the tweets
 
-        later, added tweets since date, other options
+        date time objects
+        start_date = None - get tweets since the start date
+        end_date = None - get tweets before the end date
         """
 
         if nToGet is None:
@@ -91,13 +97,26 @@ class Twitter(object):
                                             include_rts = True,
                                             tweet_mode = 'extended' )
 
+        if not start_date and not end_date:
+            ret_tweets = new_tweets
+        else:
+            ret_tweets = []
+            for _tweet in new_tweets:
+                if _tweet.created_at >= start_date and\
+                   _tweet.created_at <= end_date:
+                    ret_tweets.append(_tweet)
+
+        # loop over all the tweets and see if they fit with in the
+        # requested time line
+        
+        
         log.debug('Got ' + str(len(new_tweets)) + ' tweets ...')
         
-        if len(new_tweets) == 0:
+        if len(ret_tweets) == 0:
             # nothng returned - return empty list
-            return new_tweets
+            return ret_tweets
 
-        alltweets.extend(new_tweets)
+        alltweets.extend(ret_tweets)
         
         oldest = new_tweets[-1].id - 1
         #nToGet -= nThisTime
@@ -120,20 +139,28 @@ class Twitter(object):
 
             log.debug('Got ' + str(len(new_tweets)) + ' tweets ...')
                     
+            if not start_date and not end_date:
+                ret_tweets = new_tweets
+            else:
+                ret_tweets = []
+                for _tweet in new_tweets:
+                    if _tweet.created_at >= start_date and\
+                       _tweet.created_at <= end_date:
+                        ret_tweets.append(_tweet)
             
             # if no tweets retuned, then we got the most
-            if len(new_tweets) == 0: break
+            if len(ret_tweets) == 0: break
             
             # need to keep track of max_id and look for older id's
             oldest = new_tweets[-1].id - 1
             
             nGot += len(new_tweets)
 
-            alltweets.extend(new_tweets)
+            alltweets.extend(ret_tweets)
 
         return alltweets
     
-    def getAllTweets(self):
+    def getAllTweets(self,sinceDays=None):
         """
         get all the tweets possible for the current configuration
 
@@ -141,10 +168,19 @@ class Twitter(object):
         """
 
         alltweets=[]
-        
+
+        if sinceDays:
+            today = datetime.datetime.now()
+            enddate = today - datetime.timedelta(days=7)
+        else:
+            today = None
+            enddate = None
+            
         # loop over all the feeds in feeds_to_follow
         for feed in self.feeds_to_follow:
-            feedtweets = self.getTweets(feed)
+            feedtweets = self.getTweets(feed,
+                                        start_date = today,
+                                        end_date = enddate)
             alltweets.extend(feedtweets)
 
         return alltweets
