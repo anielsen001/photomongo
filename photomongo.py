@@ -21,32 +21,15 @@ logging.basicConfig(level=logging.DEBUG,
 
 log = logging.getLogger(__name__)
 
-
-#fh = logging.FileHandler('photomongo.log')
-#formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-#fh.setFormatter(formatter)
-#log.addHandler(fh)
-
 import os
 from docopt import docopt
-
 import configparser
-
 import json
 
-#from searcher import Searcher
 import searcher
-#searcher.log.addHandler(fh)
-
 from twitter import Twitter
-#from twitter import log as twitlog
-#twitlog.addHandler(fh)
-
 from gmail import Gmail
-
-#from progress_bar import print_progress
 import progress_bar
-
 
 # to save/reload tweets use pickle
 import pickle
@@ -89,7 +72,7 @@ if __name__=='__main__':
     try:
         gmailconf = config['gmail']
     except KeyError:
-        # gmail not configure
+        # gmail not configured
         log.info('gmail not configured, emails will not be sent')
 
     try:
