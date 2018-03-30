@@ -127,9 +127,6 @@ class Twitter(object):
 
             # how many to get this time?
             nThisTime = nPerTry if (nToGet - nGot) > nPerTry else (nToGet - nGot)
-            #print(nThisTime)
-            #print(nToGet)
-            #print(nGot)
             
             new_tweets = self.api.user_timeline(screen_name = screen_name,
                                                 count = nThisTime,
@@ -158,6 +155,7 @@ class Twitter(object):
 
             alltweets.extend(ret_tweets)
 
+        log.debug('Found ' + str(len(alltweets)) + ' tweets in ' + str(screen_name))
         return alltweets
     
     def getAllTweets(self,sinceDays=None):
@@ -170,6 +168,7 @@ class Twitter(object):
         alltweets=[]
 
         if sinceDays:
+            log.debug('Getting tweets since last ' + str(sinceDays) + ' days.')
             today = datetime.datetime.now()
             enddate = today - datetime.timedelta(days=7)
         else:
