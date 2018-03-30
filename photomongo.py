@@ -159,10 +159,13 @@ if __name__=='__main__':
 
     
     if not maxCount:
+        # if maxCount not set, use all tweets at max
         totlen = len(alltweets)
-        #for v in alltweets.values():
-        #    totlen += len(v)
+    elif len(alltweets) < maxCount:
+        # if fewer tweets found than max count, use that number
+        totlen = len(alltweets)
     else:
+        # otherwise, process maxcCount at most            
         totlen = maxCount
 
     searchresults = []
@@ -178,7 +181,8 @@ if __name__=='__main__':
         gm.create_and_send_message('photomongo results to review',\
                                    'found results')
     else:
+        msg = 'Photomongo found no results in ' + str(totlen) + ' tweets.'
         gm.create_and_send_message('photomongo no results',\
-                                   'no results')
+                                   msg)
 
             
