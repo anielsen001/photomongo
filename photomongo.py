@@ -55,7 +55,7 @@ if __name__=='__main__':
 
     try:
         sinceDays = int(args['--since'])
-    except KeyError:
+    except ( KeyError, TypeError):
         sinceDays = None
         
     log.debug('pickleToFile = ' + str(pickleToFile))
@@ -117,8 +117,11 @@ if __name__=='__main__':
         # get all the tweets
         # alltweets will be a dict of lists
         # each dict key is a followed twitter stream
-        alltweets = twit.getAllTweets()
+        alltweets = twit.getAllTweets(sinceDays = sinceDays)
+        #alltweets = twit.getAllTweets()
 
+    print(len(alltweets))
+        
     # save the tweets if needed
     if pickleToFile:
         # write the tweets to a picklefile
@@ -151,6 +154,7 @@ if __name__=='__main__':
         # otherwise, process maxcCount at most            
         totlen = maxCount
 
+    print(totlen)
     searchresults = []
     
     for i,tweet in enumerate( alltweets ):
