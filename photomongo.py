@@ -160,7 +160,7 @@ if __name__=='__main__':
     for i,tweet in enumerate( alltweets ):
         # this searches on tweet at a time
         searchresults.extend( tweetsearcher.searchTweet(tweet) )
-        progress_bar.print_progress(i,totlen)
+        progress_bar.print_progress(i,totlen-1)
         if i == totlen: break
 
     # send email if search results come back
