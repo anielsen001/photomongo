@@ -138,10 +138,10 @@ class Gmail(object):
       try:
         message = (service.users().messages().send(userId=user_id, body=message)
                    .execute())
-        print('Message Id: ' + message['id'])
+        log.debug('Message Id: ' + message['id'])
         return message
       except errors.HttpError:
-        print('An error occurred')
+        log.error('An error occurred')
         raise
 
     def create_and_send_message(self,subject,message_text):
