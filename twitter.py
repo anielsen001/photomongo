@@ -84,6 +84,9 @@ class Twitter(object):
         if nToGet is None:
             nToGet = self.max_per_feed
 
+        log.debug('Getting up to ' + str(nToGet) + ' tweets from ' + screen_name )
+        log.debug('   from ' + str(start_date) + ' to ' + str(end_date) )
+            
         alltweets = [] # list to hold tweet
         nGot = 0 # number of tweets retrieved
 
@@ -97,10 +100,10 @@ class Twitter(object):
                                             include_rts = True,
                                             tweet_mode = 'extended' )
 
+        ret_tweets = []
         if not start_date and not end_date:
             ret_tweets = new_tweets
         else:
-            ret_tweets = []
             for _tweet in new_tweets:
                 if _tweet.created_at >= start_date and\
                    _tweet.created_at <= end_date:
@@ -110,7 +113,7 @@ class Twitter(object):
         # requested time line
         
         
-        log.debug('Got ' + str(len(new_tweets)) + ' tweets ...')
+        log.debug('Got ' + str(len(new_tweets)) + ' tweets before time frame check')
         
         if len(ret_tweets) == 0:
             # nothng returned - return empty list
@@ -134,12 +137,12 @@ class Twitter(object):
                                                 include_rts = True,
                                                 tweet_mode='extended')
 
-            log.debug('Got ' + str(len(new_tweets)) + ' tweets ...')
-                    
+            log.debug('Got ' + str(len(new_tweets)) + ' tweets before time frame check')
+
+            ret_tweets = []
             if not start_date and not end_date:
                 ret_tweets = new_tweets
             else:
-                ret_tweets = []
                 for _tweet in new_tweets:
                     if _tweet.created_at >= start_date and\
                        _tweet.created_at <= end_date:
@@ -165,18 +168,17 @@ class Twitter(object):
         may take a while
         """
 
-        alltweets=[]
-
         if sinceDays:
             log.debug('Getting tweets since last ' + str(sinceDays) + ' days.')
             today = datetime.datetime.now()
-            #enddate = today - datetime.timedelta(days= int(sinceDays) )
             start_date = today - datetime.timedelta( days= 7 )
+            log.debug('Today = ' + str(today) + ' start day = ' + str(start_date) )
         else:
             today = None
             start_date = None
             
         # loop over all the feeds in feeds_to_follow
+        alltweets=[]
         for feed in self.feeds_to_follow:
             feedtweets = self.getTweets(feed,
                                         start_date = start_date,
