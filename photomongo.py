@@ -128,8 +128,6 @@ if __name__=='__main__':
         # each dict key is a followed twitter stream
         alltweets = twit.getAllTweets(sinceDays = sinceDays)
         #alltweets = twit.getAllTweets()
-
-    print(len(alltweets))
         
     # save the tweets if needed
     if pickleToFile:
@@ -151,8 +149,7 @@ if __name__=='__main__':
     except AttributeError:
         # assume it's a list
         pass
-
-    
+  
     if not maxCount:
         # if maxCount not set, use all tweets at max
         totlen = len(alltweets)
@@ -163,7 +160,6 @@ if __name__=='__main__':
         # otherwise, process maxcCount at most            
         totlen = maxCount
 
-    print(totlen)
     searchresults = []
     
     for i,tweet in enumerate( alltweets ):
