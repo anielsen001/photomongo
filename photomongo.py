@@ -34,6 +34,15 @@ import progress_bar
 # to save/reload tweets use pickle
 import pickle
 
+# control logging level of modules
+logging.getLogger("requests").setLevel(logging.WARNING)
+logging.getLogger("urllib3").setLevel(logging.WARNING)
+logging.getLogger("PIL").setLevel(logging.WARNING)
+logging.getLogger("oauthlib").setLevel(logging.WARNING)
+logging.getLogger("tweepy").setLevel(logging.WARNING)
+logging.getLogger("requests_oauthlib").setLevel(logging.WARNING)
+logging.getLogger("googleapiclient").setLevel(logging.WARNING)
+
 if __name__=='__main__':
     
     args = docopt(__doc__)
