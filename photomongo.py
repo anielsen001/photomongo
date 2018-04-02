@@ -170,8 +170,19 @@ if __name__=='__main__':
 
     # send email if search results come back
     if searchresults:
+
+        # format message to send
+        msg = ''
+        for sr in searchresults:
+            url = 'https://twitter.com/' +\
+                  sr.reference.user.screen_name +\
+                  '/status/' +\
+                  sr.reference.id_str
+
+            msg += url + '\n\n'
+            
         gm.create_and_send_message('photomongo results to review',\
-                                   'found results')
+                                   msg)
     else:
         msg = 'Photomongo found no results in ' + str(totlen) + ' tweets.'
         gm.create_and_send_message('photomongo no results',\
