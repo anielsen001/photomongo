@@ -179,7 +179,7 @@ if __name__=='__main__':
                   '/status/' +\
                   sr.reference.id_str
 
-            msg += url + '\n\n'
+            msg += url + ' at ' + str(sr.match_loc) + '\n\n'
             
         gm.create_and_send_message('photomongo results to review',\
                                    msg)
