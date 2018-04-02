@@ -338,6 +338,7 @@ class TweetSearcher(Searcher):
             
             url = m['media_url']
             # this assumes an image - need to handle video
+            # appear to receive a thumbnail in case of video
             im = Image.open(requests.get(url, stream=True).raw)
             npim = np.asarray(im)
             
@@ -353,7 +354,8 @@ class TweetSearcher(Searcher):
                                                  'tweet_' + tweet.id_str + '.jpg'])
             else:
                 drawFaceName = False
-                
+
+            # this returns multiple matches per image if multiple faces match
             mediamatches = self.searchPhoto( npimc,
                                              tweet,
                                              drawMatchFace = drawFaceName)
