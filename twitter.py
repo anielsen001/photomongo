@@ -170,16 +170,17 @@ class Twitter(object):
         if sinceDays:
             log.debug('Getting tweets since last ' + str(sinceDays) + ' days.')
             today = datetime.datetime.now()
-            enddate = today - datetime.timedelta(days=7)
+            #enddate = today - datetime.timedelta(days= int(sinceDays) )
+            start_date = today - datetime.timedelta( days= 7 )
         else:
             today = None
-            enddate = None
+            start_date = None
             
         # loop over all the feeds in feeds_to_follow
         for feed in self.feeds_to_follow:
             feedtweets = self.getTweets(feed,
-                                        start_date = today,
-                                        end_date = enddate)
+                                        start_date = start_date,
+                                        end_date = today)
             alltweets.extend(feedtweets)
 
         return alltweets
