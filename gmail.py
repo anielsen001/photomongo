@@ -9,6 +9,8 @@ To create API tokens and access go here:
 https://console.developers.google.com
 
 """
+import logging
+log = logging.getLogger(__name__)
 
 import httplib2
 import os
