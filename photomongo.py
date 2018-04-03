@@ -161,12 +161,14 @@ if __name__=='__main__':
         totlen = maxCount
 
     searchresults = []
-    
-    for i,tweet in enumerate( alltweets ):
-        # this searches on tweet at a time
-        searchresults.extend( tweetsearcher.searchTweet(tweet) )
-        progress_bar.print_progress(i,totlen-1)
-        if i == totlen: break
+    if alltweets:
+        for i,tweet in enumerate( alltweets ):
+            # this searches on tweet at a time
+            searchresults.extend( tweetsearcher.searchTweet(tweet) )
+            # count in progress_bar is i+1 because we start at zero and
+            # this should not be zero-based counter
+            progress_bar.print_progress(i+1,totlen)
+            if i == totlen: break
 
     # send email if search results come back
     if searchresults:
