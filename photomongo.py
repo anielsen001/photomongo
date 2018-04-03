@@ -6,11 +6,12 @@ Usage:
   photomongo [options] CONFIGFILE
 
 Options:
-  -h --help  Show this screen. 
-  --pickle-to=<picklefile>  file to save tweets.
+  -h --help                   Show this screen. 
+  --pickle-to=<picklefile>    file to save tweets.
   --pickle-from=<picklefile>  file to read tweets.
-  --max=<number>  maximum number to process, primarily for debug
-  --since=<days>  maximum number of days to get in the past
+  --max=<number>              maximum number to process, primarily for debug
+  --since=<days>              maximum number of days to get in the past
+  --progress-bar              display the progress bar
 
 """
 
@@ -66,6 +67,11 @@ if __name__=='__main__':
         sinceDays = int(args['--since'])
     except ( KeyError, TypeError):
         sinceDays = None
+
+    try:
+        showProgressBar = args['--progress-bar']
+    except KeyError:
+        showProgressBar = False
         
     log.debug('pickleToFile = ' + str(pickleToFile))
     log.debug('pickleFromFile = ' + str(pickleFromFile))
@@ -165,10 +171,14 @@ if __name__=='__main__':
         for i,tweet in enumerate( alltweets ):
             # this searches on tweet at a time
             searchresults.extend( tweetsearcher.searchTweet(tweet) )
+            
             # count in progress_bar is i+1 because we start at zero and
             # this should not be zero-based counter
-            progress_bar.print_progress(i+1,totlen)
-            if i == totlen: break
+            if showProgressBar:
+                progress_bar.print_progress(i+1,totlen)
+                
+            if i == totlen:
+                break
 
     # send email if search results come back
     if searchresults:
