@@ -85,4 +85,6 @@ emacs mongo.conf
 
 * Run photomongo
 
+#+begin_src
 python photomongo.py mongo.conf --since=1 --progress-bar
+#+end_src
