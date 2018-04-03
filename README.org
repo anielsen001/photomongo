@@ -1,0 +1,88 @@
+* Photomongo Code Setup
+
+Photomongo requires Python 3. I recommend configured a virtualenv,
+and install requirements.
+
+For my setup the directory structure is a bit backwards for now. 
+I created a directory structure like this
+
+#+begin_src
+mkdir -p $HOME/proj/face_detect/
+cd $HOME/proj/face_detect/
+git clone git@github.com:anielsen001/photomongo.git
+git clone https://github.com/davisking/dlib.git
+git clone git@github.com:anielsen001/face_recognition.git
+virtualenv --python=python3 $HOME/proj/face_detect/
+#+end_src
+
+** build dlib 
+
+Follow the instructions for dlib, essentially this:
+
+#+begin_src
+mkdir build; cd build; cmake .. -DUSE_AVX_INSTRUCTIONS=1; cmake --build .
+python setup.py install --yes USE_AVX_INSTRUCTIONS
+#+end_src
+
+both may not be needed.
+
+** face_recognition
+
+#+begin_src
+python setup.py install
+#+end_src
+
+This may install dlib also.
+
+** other python requirements
+
+#+begin_src
+pip install -r requirements.txt
+#+end_src
+
+* Photomongo configuration
+
+** gmail configuration
+
+This is optional. If you don't want to do it, leave this section out
+of the configuration file.
+
+Before running, the client_secret.json file needs to be save from the 
+google developers site
+https://console.developers.google.com/
+select "credentials"
+either select existing credentials or create new credentials, download 
+the json file and save as client_secret.json in the current working 
+directory.
+
+#+begin_src
+python quickstart.py --noauth_local_webserver
+#+end_src
+
+You will have to cut and paste between the terminal and the web
+browser to configure things. 
+
+** create working directories
+
+*** known photos
+
+#+begin_src
+mkdir -p $HOME/data/photos/known 
+mkdir -p $HOME/data/photos/match
+#+end_src
+
+Put known photos with a single face per file into the 'known' directory.
+
+*** results
+
+** configuration file
+
+Edit the configuration file as needed:
+
+#+begin_src
+emacs mongo.conf
+#+end_src
+
+* Run photomongo
+
+python photomongo.py mongo.conf --since=1 --progress-bar
