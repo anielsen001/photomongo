@@ -171,7 +171,7 @@ class Twitter(object):
         if sinceDays:
             log.debug('Getting tweets since last ' + str(sinceDays) + ' days.')
             today = datetime.datetime.now()
-            start_date = today - datetime.timedelta( days= 7 )
+            start_date = today - datetime.timedelta( days= sinceDays )
             log.debug('Today = ' + str(today) + ' start day = ' + str(start_date) )
         else:
             today = None
