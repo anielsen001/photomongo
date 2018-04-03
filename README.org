@@ -68,12 +68,15 @@ browser to configure things.
 
 #+begin_src
 mkdir -p $HOME/data/photos/known 
-mkdir -p $HOME/data/photos/match
 #+end_src
 
 Put known photos with a single face per file into the 'known' directory.
 
 *** results
+
+#+begin_src
+mkdir -p $HOME/data/photos/match
+#+end_src
 
 ** configuration file
 
