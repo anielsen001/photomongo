@@ -86,8 +86,23 @@ Edit the configuration file as needed:
 emacs mongo.conf
 #+end_src
 
+
 * Run photomongo
 
 #+begin_src
 python photomongo.py mongo.conf --since=1 --progress-bar
+#+end_src
+
+* Configure crontab
+
+Because I used a virtual environment for python, I created a 
+wrapper shell script that could be run independently as a single
+command and used this as my command to crontab.
+#+begin_src
+photomongo_cron.sh
+#+end_src
+
+I added this line to my crontab to run every night at 2am
+#+begin_src
+0 2 * * * /home/me/proj/face_detect/photomongo/photomongo_cron.sh
 #+end_src
