@@ -6,10 +6,10 @@ Usage:
   download_tweet_images.py [options] CONFIGFILE DESTINATION
 
 Options:
-  -h --help       Show this screen
-  --since=<days>  Maximum number of days to get in the past
-  --max=<number>  Maximum number to get
-  --progress-bar  Display the progress bar
+  -h --help          Show this screen
+  --since=<days>     Maximum number of days to get in the past
+  --max=<number>     Maximum number to get
+  --no-progress-bar  Display the progress bar
 
 """
 
@@ -50,10 +50,11 @@ if __name__=='__main__':
     except ( KeyError, TypeError):
         sinceDays = None
 
+    
     try:
-        showProgressBar = args['--progress-bar']
+        showProgressBar = args['--no-progress-bar']
     except KeyError:
-        showProgressBar = False
+        showProgressBar = True
      
     # get the configuration file
     conf_file = args['CONFIGFILE']
@@ -134,7 +135,7 @@ if __name__=='__main__':
                                                 str(j).rjust(3,'0') +
                                                 fext ] )
                 
-                wget.download( url, medianame )
+                wget.download( url, medianame, bar = None )
 
             # count in progress_bar is i+1 because we start at zero and
             # this should not be zero-based counter
