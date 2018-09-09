@@ -1,0 +1,133 @@
+* ROC curve framework 
+  
+* data
+
+a directory structure holding the data to process
+
+also need some kind of truth descripton that can be compare with the detector
+output
+
+The data has duplicates, the tweet image names are unique, but the images are the same. 
+Use sha256sum 
+
+#+begin_src shell
+sha256sum *jpg >> tweet_jpg.sha256
+#+end_src
+
+To find the duplicates, load into pandas
+
+#+begin_src python
+import pandas as pd
+df = pd.read_csv('tweet_jpg.sha256',delim_whitespace = True, header = None)
+df.columns=['hash','name']
+# determine the list with duplicates removed
+df_drop = df.drop_duplicates(subset='hash',keep='first')
+
+# create a list of just the duplicates
+dups = df[df.duplicated(subset='hash',keep='first')] # pandas dataframe
+dupnames = [ n for n in dups['name'] ] # standard python list of strings
+
+import shutil
+# create a directory to move the duplicates to 
+mkdir dups
+[ shutil.move(_n,'dups') for _n in dupnames ]
+
+#+end_src
+
+This creates a file with lines like this:
+3d8d46557a2ee5db00dcd231d039f904da40bd1be0c61197db2f4679dc7bb47d  tweet_1000160557771747329_000.jpg
+q
+
+* function to run the detector
+
+This should be a wrapper function that takes the detector and a parameter and run
+the detector.
+
+basic calling sequence for face_recognition
+face_recognition_cli.py --tolerance 0.54  ./pictures_of_people_i_know/ ./unknown_pictures/
+
+tolerance is the parameter we can vary. we can run on a range of these values or we can
+vary the parameter one direction until we get no detections (P_d = 0) and then vary it the other until
+we detect everything (P_fa = 1)
+
+python face_recognition/face_recognition_cli.py --cpus 4 /home/apn/data/photos/rocknown/ /home/apn/data/mongo_roc/ | tee roc1.txt
+
+There is also a flag to face_recognition_cli.py --show-distance true which will print the
+tolerance for each image encountered which counts as a match. To print them all out, set 
+--tolerance to a large number, all iamges will match, but you'll also get all the metrics
+
+Dump all to a text file and you'll get lines like this:
+/home/apn/data/mongo_roc/tweet_869701854271348736_000.jpg,no_persons_found,None
+/home/apn/data/mongo_roc/tweet_845016856461225986_000.jpg,test_crop,0.7563323997053106
+/home/apn/data/mongo_roc/tweet_845016856461225986_000.jpg,test_crop,0.6574055854251517
+
+
+
+#+begin_src
+
+import os
+
+tol = 0.54
+cmd = 'face_recognition_cli.py --tolerance ' + str(tol) + ' ' + str(known_dir) + ' ' + str(unknown)
+os.system(cmd)
+
+#+end_src
+
+* output location
+
+a directory structure to hold the detector output
+
+* comparator function 
+
+compare detector output to truth, reporting on correct detection or false alarm
+
+* sweeper function
+
+sweeps up the results of all the processing and puts them together for final
+product generation
+
+* plots
+
+use pandas to analyze data
+
+#+begin_src python
+
+import matplotlib.pylab as plt
+import seaborn as sns
+import pandas as pd
+
+nosoi = pd.read_csv('roc3.txt', names = ['file','name','score'],na_values = ['None','no_persons_found']  )
+nosoi.assign(truth=False) # create a column of "false"
+
+soi = pd.read_csv('roc_known.txt', names = ['file','name','score'], na_values = ['None','no_persons_found'] )
+soi.assign(truth=True) # create a column of Truth = True
+
+allface = pd.concat([soi.assign(true=True),nosoi.assign(true=False)])
+allface.assign(rank=allface.rank(0)['score']
+afr = allface.assign(rank=allface.rank(0,ascending=False)['score'])
+sns.lmplot('score','rank',data=afr,fit_reg=False,hue='true')
+
+# generate info for ROC curves
+det_thresh = np.linspace(0,1,11) # detection threshold to use
+det = pd.DataFrame()
+det['thresh'] = det_thresh[:-1]
+data_proc = { 'soi': soi, 'nosoi':nosoi}
+for k,v in data_proc.items():
+    cnt, _ = np.histogram( v['score'] , bins = det_thresh )
+    det[k] = np.cumsum(cnt)
+
+det = det.assign(pd = det['soi']/det['soi'].iloc[-1])
+det = det.assign(pfa = det['nosoi']/det['nosoi'].iloc[-1])
+
+plt.figure()
+sns.set() # reset to default parameters
+sns.set_context('talk')
+sns.set_style('darkgrid')
+sns.lineplot(x='pfa',y='pd',data=det)
+linedat = np.array([0,1])
+plt.plot( linedat,linedat ,'--k' )
+plt.xlabel('$P_{fa}$')
+plt.ylabel('$P_{d}$')
+plt.title('Receiver Operating Characteristic')
+
+#+end_src
