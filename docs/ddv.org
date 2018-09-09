@@ -1,0 +1,119 @@
+#    -*- mode: org -*-
+#
+# This is a presentation for the Dayton Data Visualization
+# meeting in November 2018
+#
+# Uses emacs org-mode and org-reveal
+
+
+#+TITLE: photomongo
+#+DATE: November 2018
+#+AUTHOR: Aaron Nielsen
+#+EMAIL: apn@didactex.com
+
+#+OPTIONS: title:t author:t date:t email:t  # forces author, date, email to be exported
+#+OPTIONS: timestamp:nil              # remove timestamp
+#+REVEAL_THEME: moon
+#+REVEAL_TRANS: default
+
+# seems to require absolute path here:
+#+REVEAL_EXTRA_CSS: file:///home/apn/proj/face_detect/photomongo/docs/custom.css
+
+#+OPTIONS: toc:nil      # remove table of contents
+#+OPTIONS: num:nil      # remove numbers from headings
+#+OPTIONS: ^:nil
+
+#+OPTIONS: reveal_center:t reveal_progress:t reveal_history:t reveal_control:t
+#+OPTIONS: reveal_rolling_links:t reveal_keyboard:t reveal_overview:t 
+
+#+OPTIONS: reveal_title_slide:"<h1>%t</h1><h4>%a</h4><h4>%e</h4><h4>%d</h4>"
+
+#+REVEAL_HLEVEL: 1
+
+
+# +REVEAL_TITLE_SLIDE_BACKGROUND: /home/apn/ddt/texmf/graphics/DidactexLogo.png
+# +REVEAL_TITLE_SLIDE_BACKGROUND_SIZE: 200px
+
+#   #+attr_html: :width 60% 
+#  [[/home/apn/ddt/texmf/graphics/DidactexLogo.png]
+
+* Who am I? 
+
+ - Chief Scientist for [[http://www.didactex.com][Didactex, llc]]
+ - Statistical signal processing and detection processing
+ - Educational background physics;  [[https://github.com/anielsen001/phd-thesis][experimental superconductivity]]
+
+** Didactex
+
+#+attr_html: :width 60% 
+[[/home/apn/ddt/texmf/graphics/DidactexLogo.png]]
+
+
+* Introduction
+
+photomongo searches for known faces on social media
+
+#+begin_src dot :file flowchart.png :cmdline -Kdot -Tpng
+digraph {
+  // graph from left to right
+  rankdir=LR; 
+  splnes=true; 
+  graph [fontsize=10 fontname="Verdana" compound=true];
+  node [shape=box fontsize=10 fontname="Verdana"];
+
+  tweet [ shape=none label=< <table border="0"><tr><td fixedsize="true" width="50" height="50"><img src="Twitter_Logo_WhiteOnBlue.png" /></td></tr></table> >];
+
+  get [label="Grab new tweets"];
+
+  search [label="Search tweet media for faces"];
+
+  report [label="Create report"];
+
+  email [ shape=none,
+           label=< <table border="0"><tr><td fixedsize="true"  height="250" ><img style="max-width: 100px; height: auto; " src="resize_mongo_email_screenshot.png" /></td></tr></table> >];
+
+  subgraph cluster0{
+    label = "photomongo"
+    get -> search
+    search -> report
+  }
+ 
+  tweet -> get ; 
+  report -> email; 
+
+}
+#+end_src
+
+#+RESULTS:
+[[file:flowchart.png]]
+
+
+
+** Why photomongo?
+
+because
+
+* search for faces on social media
+
+ - [[https://github.com/ageitgey/face_recognition][face_recognition]] python library by [[https://adamgeitgey.com/][Adam Geitgey]]
+ - wraps [[http://dlib.net/][dlib]] c++ machine learning library by Davis King
+
+* Performance Metrics
+
+ - Exceedance
+ - Receiver Operating Characteristic
+
+
+** Exceedance
+
+#+attr_html: :width 60% 
+[[./exceedance.png]]
+
+** Receiver Operating Characteristic
+
+#+attr_html: :width 60% 
+[[./roc.png]]
+
+* Resources
+
+[[https://github.com/anielsen001/photomongo]]
