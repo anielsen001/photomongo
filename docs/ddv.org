@@ -1,5 +1,4 @@
-#    -*- mode: org -*-
-#
+# -*- mode: org; org-confirm-babel-evaluate: nil -*-
 # This is a presentation for the Dayton Data Visualization
 # meeting in November 2018
 #
@@ -53,6 +52,14 @@
 
 photomongo searches for known faces on social media
 
+#+REVEAL_HTML: <img class="stretch" src="Twitter-Bieber-2018-09-18-05-53-44.png">
+
+* Why photomongo?
+
+because
+
+* Flow chart
+
 #+begin_src dot :file flowchart.png :cmdline -Kdot -Tpng
 digraph {
   // graph from left to right
@@ -89,14 +96,15 @@ digraph {
 
 
 
-** Why photomongo?
 
-because
 
-* search for faces on social media
+* facial recognition
 
  - [[https://github.com/ageitgey/face_recognition][face_recognition]] python library by [[https://adamgeitgey.com/][Adam Geitgey]]
  - wraps [[http://dlib.net/][dlib]] c++ machine learning library by Davis King
+
+ - how good are they?
+
 
 * Performance Metrics
 
@@ -104,12 +112,12 @@ because
  - Receiver Operating Characteristic
 
 
-** Exceedance
+* Exceedance
 
 #+attr_html: :width 60% 
 [[./exceedance.png]]
 
-** Receiver Operating Characteristic
+* Receiver Operating Characteristic
 
 #+attr_html: :width 60% 
 [[./roc.png]]
