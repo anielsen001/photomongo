@@ -42,10 +42,12 @@
  - Statistical signal processing and detection processing
  - Educational background physics;  [[https://github.com/anielsen001/phd-thesis][experimental superconductivity]]
 
-** Didactex
+#+REVEAL_HTML: <img class="stretch" src="/home/apn/ddt/texmf/graphics/DidactexLogo.png">
 
-#+attr_html: :width 60% 
-[[/home/apn/ddt/texmf/graphics/DidactexLogo.png]]
+# # * Didactex
+
+# # #+attr_html: :width 60% 
+# ## [[/home/apn/ddt/texmf/graphics/DidactexLogo.png]]
 
 
 * Introduction
@@ -59,6 +61,8 @@ photomongo searches for known faces on social media
 because
 
 * Flow chart
+
+# - flow chart should include something about training and set up of classifier
 
 #+begin_src dot :file flowchart.png :cmdline -Kdot -Tpng
 digraph {
@@ -76,6 +80,10 @@ digraph {
 
   report [label="Create report"];
 
+  id [ label = "Faces to find" ]; 
+
+  train [ label = "Train model" ]; 
+
   email [ shape=none,
            label=< <table border="0"><tr><td fixedsize="true"  height="250" ><img style="max-width: 100px; height: auto; " src="resize_mongo_email_screenshot.png" /></td></tr></table> >];
 
@@ -83,6 +91,12 @@ digraph {
     label = "photomongo"
     get -> search
     search -> report
+  }
+
+  subgraph cluster1{
+    label = "train" 
+    id -> train 
+    train -> search
   }
  
   tweet -> get ; 
@@ -103,14 +117,64 @@ digraph {
  - [[https://github.com/ageitgey/face_recognition][face_recognition]] python library by [[https://adamgeitgey.com/][Adam Geitgey]]
  - wraps [[http://dlib.net/][dlib]] c++ machine learning library by Davis King
 
- - how good are they?
+#+begin_src dot :file flowchart3.png :cmdline -Kdot -Tpng
+digraph{
+newrank=true;
+rankdir=LR; 
+splines=true; 
+  graph [fontsize=10 fontname="Verdana" compound=true];
+  node [shape=box fontsize=10 fontname="Verdana"];
+
+  faces_to_find [ label="Faces to find" ]
+  train [ label="Train model" ] 
+  tweet_media [ label="Tweet media" ] 
+  search [ label="Search" ]
+
+  faces_to_find -> train; 
+  tweet_media -> search[constraint=false]; 
+  train -> search; 
+
+}
+#+end_src
+
 
 
 * Performance Metrics
 
- - Exceedance
- - Receiver Operating Characteristic
+# - Exceedance
+# - Receiver Operating Characteristic
 
+#+begin_src dot :file flowchart4.png :cmdline -Kdot -Tpng
+digraph{
+newrank=true;
+rankdir=LR; 
+splines=true; 
+  graph [fontsize=10 fontname="Verdana" compound=true];
+  node [shape=box fontsize=10 fontname="Verdana"];
+
+  faces_to_find [ label="Faces to find" ]
+  train [ label="Train model" ] 
+  search [ label="Search" ]
+
+  false_alarms [ label="Library of unmatched images" ]
+  truth [ label="Library of matched images" ]
+ 
+  subGraph cluster0{
+    label = "Performance metrics"
+    roc [ label="ROC" ] 
+    exceedance [ label = "Exceedance"]
+  }
+
+  faces_to_find -> train; 
+  false_alarms -> search[constraint=false]; 
+  truth -> search[constraint=false]; 
+  train -> search; 
+  search -> roc;
+  search -> exceedance; 
+  {rank=same; false_alarms; truth; train}
+
+}
+#+end_src
 
 * Exceedance
 
