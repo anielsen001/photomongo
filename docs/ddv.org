@@ -3,6 +3,11 @@
 # meeting in November 2018
 #
 # Uses emacs org-mode and org-reveal
+#
+# headers and footers require adding the code to the html file generated
+# by this org file
+# see:
+# https://github.com/hakimel/reveal.js/issues/806#issuecomment-82295260
 
 
 #+TITLE: photomongo
@@ -50,15 +55,14 @@
 # ## [[/home/apn/ddt/texmf/graphics/DidactexLogo.png]]
 
 
-* Introduction
-
-photomongo searches for known faces on social media
+* search for known faces on social media
 
 #+REVEAL_HTML: <img class="stretch" src="Twitter-Bieber-2018-09-18-05-53-44.png">
 
 * Why photomongo?
 
-because
+ - Schools don't live up to their expectations
+ - Parents need a way to monitor for concerns
 
 * How it works
 
@@ -69,8 +73,8 @@ digraph {
   // graph from left to right
   rankdir=LR; 
   splnes=true; 
-  graph [fontsize=10 fontname="Verdana" compound=true];
-  node [shape=box fontsize=10 fontname="Verdana"];
+  graph [fontsize=20 fontname="Verdana" compound=true];
+  node [shape=box fontsize=20 fontname="Verdana"];
 
   tweet [ shape=none label=< <table border="0"><tr><td fixedsize="true" width="50" height="50"><img src="Twitter_Logo_WhiteOnBlue.png" /></td></tr></table> >];
 
@@ -80,25 +84,17 @@ digraph {
 
   report [label="Create report"];
 
-  id [ label = "Faces to find" ]; 
-
-  
   email [ shape=none,
            label=< <table border="0"><tr><td fixedsize="true"  height="250" ><img style="max-width: 100px; height: auto; " src="resize_mongo_email_screenshot.png" /></td></tr></table> >]; 
-  subgraph cluster_email{
-  label = "email"
-  email
-  }
+
 
   subgraph cluster0{
     label = "photomongo"
     get -> search
     search -> report
-      id -> search; 
+      
   }
 
-
- 
   tweet -> get ; 
   report -> email; 
 
@@ -109,6 +105,29 @@ digraph {
 [[file:flowchart.png]]
 
 
+* written in python
+
+
+#+begin_src dot :file swdesign.png :cmdline -Kdot -Tpng
+digraph{
+  rankdir=LR; 
+  splnes=true; 
+  graph [fontsize=20 fontname="Verdana" compound=true];
+  node [shape=record fontsize=20 fontname="Verdana"];
+
+  get [ label="<f0> Grab new tweets|<f1> tweepy" ];
+  search [ label="<f0> Search tweet media\nfor specific faces|<f1> face_recognition\ndlib" ];
+  report [ label="<f0> Create report|<f1> Google python API\nfor gmail" ]; 
+
+  get -> search; 
+  search -> report; 
+}
+
+
+#+end_src
+
+#+RESULTS:
+[[file:swdesign.png]]
 
 
 
@@ -123,7 +142,7 @@ newrank=true;
 rankdir=LR; 
 splines=true; 
   graph [fontsize=10 fontname="Verdana" compound=true];
-  node [shape=box fontsize=10 fontname="Verdana"];
+  node [shape=record fontsize=10 fontname="Verdana"];
 
   faces_to_find [ label="Faces to find" ]
   train [ label="Train model" ] 
@@ -194,4 +213,6 @@ splines=true;
 
 * Resources
 
-[[https://github.com/anielsen001/photomongo]]
+ - [[https://github.com/anielsen001/photomongo][photomongo github repository]]
+
+ - [[http://www.tweepy.org][tweepy]] library to access Twitter
