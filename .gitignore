@@ -1,2 +1,11 @@
+# emacs
 *~
+\#*\#
+
+# python
 *.pyc
+
+# log files
+*.log
+*.log.*
+
