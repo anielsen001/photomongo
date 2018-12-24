@@ -1,6 +1,6 @@
 # -*- mode: org; org-confirm-babel-evaluate: nil -*-
 # This is a presentation for the Dayton Data Visualization
-# meeting in November 2018
+# meeting in November 2018. This meeting was cancelled.
 #
 # Uses emacs org-mode and org-reveal
 #
