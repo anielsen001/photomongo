@@ -12,7 +12,7 @@
 #+TITLE: photomongo
 #+DATE: December 2018
 #+AUTHOR: Aaron Nielsen
-#+EMAIL: apn@didactex.com
+#+EMAIL: apn  didactex.com
 
 #+OPTIONS: title:t author:t date:t email:t  # forces author, date, email to be exported
 #+OPTIONS: timestamp:nil              # remove timestamp
