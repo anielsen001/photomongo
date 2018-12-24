@@ -203,7 +203,7 @@ splines=true;
 * Exceedance
 
 #+attr_html: :width 60% 
-[[./exceedance.png]]
+[[./img/exceedance.png]]
 
 * Receiver Operating Characteristic
 
