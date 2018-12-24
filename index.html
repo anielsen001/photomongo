@@ -7,11 +7,11 @@
 <style type="text/css">
 .underline { text-decoration: underline; }
 </style>
-<link rel="stylesheet" href="file:///home/apn/sw/reveal.js/css/reveal.css"/>
+<link rel="stylesheet" href="http://cdn.jsdelivr.net/reveal.js/3.0.0/css/reveal.css"/>
 
-<link rel="stylesheet" href="file:///home/apn/sw/reveal.js/css/theme/moon.css" id="theme"/>
+<link rel="stylesheet" href="http://cdn.jsdelivr.net/reveal.js/3.0.0/css/theme/moon.css" id="theme"/>
 
-<link rel="stylesheet" href="file:///home/apn/proj/face_detect/photomongo/docs/custom.css"/>
+<link rel="stylesheet" href="file://./custom.css"/>
 
 <!-- If the query includes 'print-pdf', include the PDF print sheet -->
 <script>
@@ -19,7 +19,7 @@
         var link = document.createElement( 'link' );
         link.rel = 'stylesheet';
         link.type = 'text/css';
-        link.href = 'file:///home/apn/sw/reveal.js/css/print/pdf.css';
+        link.href = 'http://cdn.jsdelivr.net/reveal.js/3.0.0/css/print/pdf.css';
         document.getElementsByTagName( 'head' )[0].appendChild( link );
     }
 </script>
@@ -32,7 +32,7 @@
 
 <section>
 <section id="slide-sec-">
-<h2 id="orgc136389">Who am I?</h2>
+<h2 id="org2ecb8e8">Who am I?</h2>
 <ul>
 <li>Chief Scientist for <a href="http://www.didactex.com">Didactex, llc</a></li>
 <li>Statistical signal processing and detection processing</li>
@@ -47,14 +47,14 @@
 </section>
 <section>
 <section id="slide-sec-">
-<h2 id="org9c61794">search for known faces on social media</h2>
+<h2 id="org9b6f215">search for known faces on social media</h2>
 <img class="stretch" src="./img/Twitter-Bieber-2018-09-18-05-53-44.png">
 
 </section>
 </section>
 <section>
 <section id="slide-sec-">
-<h2 id="org63326af">Why photomongo?</h2>
+<h2 id="org5a8828d">Why photomongo?</h2>
 <ul>
 <li>Schools don't live up to their expectations</li>
 <li>Parents need a way to monitor for concerns</li>
@@ -65,7 +65,7 @@
 </section>
 <section>
 <section id="slide-sec-">
-<h2 id="org61bb9be">How it works</h2>
+<h2 id="org49df419">How it works</h2>
 
 <div class="figure">
 <p><img src="./img/flowchart.png" alt="flowchart.png" />
@@ -77,7 +77,7 @@
 </section>
 <section>
 <section id="slide-sec-">
-<h2 id="orgb313e51">written in python</h2>
+<h2 id="orge472fb0">written in python</h2>
 
 <div class="figure">
 <p><img src="./img/swdesign.png" alt="swdesign.png" />
@@ -90,7 +90,7 @@
 </section>
 <section>
 <section id="slide-sec-">
-<h2 id="orgc2fca2d">facial recognition</h2>
+<h2 id="orga54e391">facial recognition</h2>
 <ul>
 <li><a href="https://github.com/ageitgey/face_recognition">face_recognition</a> python library by <a href="https://adamgeitgey.com/">Adam Geitgey</a></li>
 <li>wraps <a href="http://dlib.net/">dlib</a> c++ machine learning library by Davis King</li>
@@ -109,7 +109,7 @@
 </section>
 <section>
 <section id="slide-sec-">
-<h2 id="orgfa3d858">Performance Metrics</h2>
+<h2 id="orgddb5182">Performance Metrics</h2>
 
 <div class="figure">
 <p><img src="./img/flowchart4.png" alt="flowchart4.png" />
@@ -120,7 +120,7 @@
 </section>
 <section>
 <section id="slide-sec-">
-<h2 id="org0f2032d">Exceedance</h2>
+<h2 id="org0f3e3ac">Exceedance</h2>
 
 <div class="figure">
 <p><img src="./img/exceedance.png" alt="exceedance.png" width="60%" />
@@ -131,7 +131,7 @@
 </section>
 <section>
 <section id="slide-sec-">
-<h2 id="org1bcf4a4">Receiver Operating Characteristic</h2>
+<h2 id="org1faf9b3">Receiver Operating Characteristic</h2>
 
 <div class="figure">
 <p><img src="./img/roc.png" alt="roc.png" width="60%" />
@@ -142,7 +142,7 @@
 </section>
 <section>
 <section id="slide-sec-">
-<h2 id="org238cf3b">Resources</h2>
+<h2 id="org9e5fa76">Resources</h2>
 <ul>
 <li><a href="https://github.com/anielsen001/photomongo">photomongo github repository</a></li>
 
@@ -153,8 +153,8 @@
 </section>
 </div>
 </div>
-<script src="file:///home/apn/sw/reveal.js/lib/js/head.min.js"></script>
-<script src="file:///home/apn/sw/reveal.js/js/reveal.js"></script>
+<script src="http://cdn.jsdelivr.net/reveal.js/3.0.0/lib/js/head.min.js"></script>
+<script src="http://cdn.jsdelivr.net/reveal.js/3.0.0/js/reveal.js"></script>
 
 <script>
 // Full list of configuration options available here:
@@ -181,11 +181,11 @@ multiplex: {
 
 // Optional libraries used to extend on reveal.js
 dependencies: [
- { src: 'file:///home/apn/sw/reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
- { src: 'file:///home/apn/sw/reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
- { src: 'file:///home/apn/sw/reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
- { src: 'file:///home/apn/sw/reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
- { src: 'file:///home/apn/sw/reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+ { src: 'http://cdn.jsdelivr.net/reveal.js/3.0.0/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+ { src: 'http://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'http://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'http://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+ { src: 'http://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
 });
 </script>
 </body>
