@@ -1,6 +1,5 @@
 # -*- mode: org; org-confirm-babel-evaluate: nil -*-
-# This is a presentation for the Dayton Data Visualization
-# meeting in November 2018. This meeting was cancelled.
+# This is a presentation 
 #
 # Uses emacs org-mode and org-reveal
 #
@@ -11,7 +10,7 @@
 
 
 #+TITLE: photomongo
-#+DATE: November 2018
+#+DATE: December 2018
 #+AUTHOR: Aaron Nielsen
 #+EMAIL: apn@didactex.com
 
