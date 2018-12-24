@@ -7,9 +7,9 @@
 <style type="text/css">
 .underline { text-decoration: underline; }
 </style>
-<link rel="stylesheet" href="./css/reveal.css"/>
+<link rel="stylesheet" href="css/reveal.css"/>
 
-<link rel="stylesheet" href="./css/theme/moon.css" id="theme"/>
+<link rel="stylesheet" href="css/theme/moon.css" id="theme"/>
 
 <link rel="stylesheet" href="css/custom.css"/>
 
@@ -19,7 +19,7 @@
         var link = document.createElement( 'link' );
         link.rel = 'stylesheet';
         link.type = 'text/css';
-        link.href = './css/print/pdf.css';
+        link.href = 'css/css/print/pdf.css';
         document.getElementsByTagName( 'head' )[0].appendChild( link );
     }
 </script>
@@ -29,10 +29,13 @@
 <div class="slides">
 <section id="sec-title-slide"><h1>photomongo</h1><h4>Aaron Nielsen</h4><h4><a href="mailto:apn  didactex.com">apn  didactex.com</a></h4><h4>December 2018</h4>
 </section>
+<p>
+### # +REVEAL_ROOT: <a href="http://cdn.jsdelivr.net/reveal.js/3.0.0/">http://cdn.jsdelivr.net/reveal.js/3.0.0/</a>
+</p>
 
 <section>
 <section id="slide-sec-">
-<h2 id="orge2d821d">Who am I?</h2>
+<h2 id="orgec8d42d">Who am I?</h2>
 <ul>
 <li>Chief Scientist for <a href="http://www.didactex.com">Didactex, llc</a></li>
 <li>Statistical signal processing and detection processing</li>
@@ -47,14 +50,14 @@
 </section>
 <section>
 <section id="slide-sec-">
-<h2 id="org2243c55">search for known faces on social media</h2>
+<h2 id="org8cc4243">search for known faces on social media</h2>
 <img class="stretch" src="./img/Twitter-Bieber-2018-09-18-05-53-44.png">
 
 </section>
 </section>
 <section>
 <section id="slide-sec-">
-<h2 id="orgeec28a2">Why photomongo?</h2>
+<h2 id="orgb9d44f5">Why photomongo?</h2>
 <ul>
 <li>Schools don't live up to their expectations</li>
 <li>Parents need a way to monitor for concerns</li>
@@ -65,7 +68,7 @@
 </section>
 <section>
 <section id="slide-sec-">
-<h2 id="orgb406d9a">How it works</h2>
+<h2 id="org6c5d5d4">How it works</h2>
 
 <div class="figure">
 <p><img src="./img/flowchart.png" alt="flowchart.png" />
@@ -77,7 +80,7 @@
 </section>
 <section>
 <section id="slide-sec-">
-<h2 id="orgdb7e9e4">written in python</h2>
+<h2 id="org418a512">written in python</h2>
 
 <div class="figure">
 <p><img src="./img/swdesign.png" alt="swdesign.png" />
@@ -90,7 +93,7 @@
 </section>
 <section>
 <section id="slide-sec-">
-<h2 id="org3799669">facial recognition</h2>
+<h2 id="orgb5f7cbb">facial recognition</h2>
 <ul>
 <li><a href="https://github.com/ageitgey/face_recognition">face_recognition</a> python library by <a href="https://adamgeitgey.com/">Adam Geitgey</a></li>
 <li>wraps <a href="http://dlib.net/">dlib</a> c++ machine learning library by Davis King</li>
@@ -109,7 +112,7 @@
 </section>
 <section>
 <section id="slide-sec-">
-<h2 id="orgf813bfe">Performance Metrics</h2>
+<h2 id="orgeb9a908">Performance Metrics</h2>
 
 <div class="figure">
 <p><img src="./img/flowchart4.png" alt="flowchart4.png" />
@@ -120,7 +123,7 @@
 </section>
 <section>
 <section id="slide-sec-">
-<h2 id="orga7e8316">Exceedance</h2>
+<h2 id="orgbb706fd">Exceedance</h2>
 
 <div class="figure">
 <p><img src="./img/exceedance.png" alt="exceedance.png" width="60%" />
@@ -131,7 +134,7 @@
 </section>
 <section>
 <section id="slide-sec-">
-<h2 id="orgf0b3e12">Receiver Operating Characteristic</h2>
+<h2 id="org86dbca4">Receiver Operating Characteristic</h2>
 
 <div class="figure">
 <p><img src="./img/roc.png" alt="roc.png" width="60%" />
@@ -142,7 +145,7 @@
 </section>
 <section>
 <section id="slide-sec-">
-<h2 id="orgd957633">Resources</h2>
+<h2 id="org1c9d4c9">Resources</h2>
 <ul>
 <li><a href="https://github.com/anielsen001/photomongo">photomongo github repository</a></li>
 
@@ -153,8 +156,8 @@
 </section>
 </div>
 </div>
-<script src="./lib/js/head.min.js"></script>
-<script src="./js/reveal.js"></script>
+<script src="css/lib/js/head.min.js"></script>
+<script src="css/js/reveal.js"></script>
 
 <script>
 // Full list of configuration options available here:
@@ -181,11 +184,11 @@ multiplex: {
 
 // Optional libraries used to extend on reveal.js
 dependencies: [
- { src: './lib/js/classList.js', condition: function() { return !document.body.classList; } },
- { src: './plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
- { src: './plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
- { src: './plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
- { src: './plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+ { src: 'css/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+ { src: 'css/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'css/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'css/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+ { src: 'css/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
 });
 </script>
 </body>

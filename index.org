@@ -17,13 +17,12 @@
 #+OPTIONS: title:t author:t date:t email:t  # forces author, date, email to be exported
 #+OPTIONS: timestamp:nil              # remove timestamp
 
-
-#+REVEAL_ROOT: http://cdn.jsdelivr.net/reveal.js/3.0.0/
+#+REVEAL_ROOT: .
 #+REVEAL_THEME: moon
 #+REVEAL_TRANS: default
 
 # seems to require absolute path here:
-#+REVEAL_EXTRA_CSS: https://anielsen001.github.io/photomongo/custom.css
+#+REVEAL_EXTRA_CSS: css/custom.css
 
 #+OPTIONS: toc:nil      # remove table of contents
 #+OPTIONS: num:nil      # remove numbers from headings
