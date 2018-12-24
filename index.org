@@ -17,7 +17,7 @@
 #+OPTIONS: title:t author:t date:t email:t  # forces author, date, email to be exported
 #+OPTIONS: timestamp:nil              # remove timestamp
 
-#+REVEAL_ROOT: .
+#+REVEAL_ROOT: reveal.js
 #+REVEAL_THEME: moon
 #+REVEAL_TRANS: default
 
