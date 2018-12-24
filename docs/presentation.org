@@ -208,7 +208,7 @@ splines=true;
 * Receiver Operating Characteristic
 
 #+attr_html: :width 60% 
-[[./roc.png]]
+[[./img/roc.png]]
 
 * Resources
 
