@@ -56,6 +56,8 @@ class Searcher(object):
 
     known_faces = None # filename, face encodings
     known_texts = None
+
+    enable_cuda = False # default to not enabled
     
     def __init__(self,searchconfig):
 
@@ -82,7 +84,16 @@ class Searcher(object):
             self.photo_match_dir = photo_match
         except KeyError:
             self.photo_match_dir = None
-    
+
+        try:
+            enable_cuda = searchconfig['enable cuda']
+        except KeyError:
+            enable_cuda = 'no'
+        if enable_cuda.lower() == 'yes':
+            self.enable_cuda = True
+        else:
+            self.enable_cuda = False
+            
     def initPhotoSearch(self):
         # parse all the photos in the search photo dir and get search features
         # expect that each photo in this set contains one face, if there is more
@@ -143,12 +154,17 @@ class Searcher(object):
         returns a list of SearchResults for each matched face or unknown
         """
 
+        if self.enable_cuda:
+            model = 'cnn'
+        else:
+            model = 'hog'
+
         # check if known_faces features are ready
         if self.known_faces is None:
             raise SearcherError('Known faces features must be initialized')
 
         # find all the faces in the image
-        face_locations = face_recognition.face_locations(im)
+        face_locations = face_recognition.face_locations( im, model = model )
 
         # encode the faces
         # there may be multiple faces in the test image
