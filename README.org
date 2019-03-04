@@ -27,14 +27,31 @@ mkdir build; cd build; cmake .. -DUSE_AVX_INSTRUCTIONS=1; cmake --build .
 To compile with CUDA support, you have to specify the path to CUDA and the path to the CUDA library. The path to the nvcc executable must be set on the PATH environment variable also:
 #+begin_src
 export PATH="/usr/lib/cuda-10.0/bin":$PATH
-cmake .. -DUSE_AVX_INSTRUCTIONS=1 -DCMAKE_PREFIX_PATH=/usr/lib/cuda-10.0 -DCUDA_TOOLKIT_ROOT_DIR=/usr/lib/cuda-10.0 -DCUDA_CUDA_LIBRARY= -DCUDA_NVCC_EXECUTABLE=/usr/lib/cuda-10.0/bin/nvcc -DCMAKE_C_COMPILER=gcc-7 -DCMAKE_CXX_COMPILER=g++-7 -DCMAKE_VERBOSE_MAKEFILE=ON
+export LD_LIBRARY_PATH="/usr/lib/cuda-10.0/lib64":${LD_LIBRARY_PATH}
+cmake .. -DUSE_AVX_INSTRUCTIONS=1 -DDLIB_USE_CUDA=1 -DCMAKE_PREFIX_PATH=/usr/lib/cuda-10.0 -DCUDA_TOOLKIT_ROOT_DIR=/usr/lib/cuda-10.0 -DCUDA_CUDA_LIBRARY= -DCUDA_NVCC_EXECUTABLE=/usr/lib/cuda-10.0/bin/nvcc -DCMAKE_C_COMPILER=gcc-7 -DCMAKE_CXX_COMPILER=g++-7 -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_INSTALL_PREFIX=$HOME/sw 
 cmake --build .
 #+end_src
 
 To build the python bindings, run
 #+begin_src
-python setup.py install --yes USE_AVX_INSTRUCTIONS
+python setup.py install  
 #+end_src
+
+Test if CUDA's available in the dlib python bindings
+#+begin_src
+apn@baby-bubbles:~/proj/face_detect/dlib$ python3
+Python 3.7.2 (default, Feb 24 2019, 11:30:14) 
+[GCC 7.3.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import dlib
+>>> import dlib.cuda as cuda
+>>> dlib.DLIB_USE_CUDA
+True
+>>> print(cuda.get_num_devices())
+2
+>>> 
+#+end_src
+Should see "True" and the number of GPUs available. 
 
 ** face_recognition
 
@@ -42,7 +59,7 @@ python setup.py install --yes USE_AVX_INSTRUCTIONS
 python setup.py install
 #+end_src
 
-This may install dlib also.
+This may also install dlib. If it does, then it cannot find the dlib installed earlier and it may break the CUDA compatibility.
 
 ** other python requirements
 
