@@ -1,2 +1,10 @@
+# emacs artifacts
 *~
+
+# python artifacts
 *.pyc
+
+# photomongo files that should not be included in repo
+client_secret.json
+mongo.conf
+photomongo.log
