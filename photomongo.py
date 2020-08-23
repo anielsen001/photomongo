@@ -84,6 +84,8 @@ if __name__=='__main__':
     config.read(conf_file)
 
     # check if gmail is configured
+    # if the gmail section is not present in the config file, then a Null
+    # Gmail handler will be created that does nothing. 
     try:
         gmailconf = config['gmail']
     except KeyError:
