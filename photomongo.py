@@ -17,8 +17,11 @@ Options:
 
 import sys
 import logging
-logging.basicConfig(level=logging.DEBUG,
-                    handlers = [logging.FileHandler('photomongo.log')] ) 
+logging.basicConfig(
+    format = '%(asctime)s %(levelname)s %(module)s [%(funcName)s] %(message)s',
+    datefmt='%Y-%m-%d,%H:%M:%S',
+    level=logging.DEBUG,
+    handlers = [logging.FileHandler('photomongo.log')] ) 
 
 log = logging.getLogger(__name__)
 
