@@ -47,21 +47,24 @@ class Gmail(object):
         gmailconf should be a dictionary-like object with required keys:
         credential file 
         """
-        self.credential_file = gmailconf['credential file']
+        if gmailconf is not None:
+            # if gmailconf is None, don't do this, and do send email
+            
+            self.credential_file = gmailconf['credential file']
 
-        self.client_secret_file = gmailconf['client secret file']
-        self.scopes = gmailconf['scopes']
-        self.application_name = gmailconf['application name']
+            self.client_secret_file = gmailconf['client secret file']
+            self.scopes = gmailconf['scopes']
+            self.application_name = gmailconf['application name']
 
-        self.send_to = gmailconf['to email address']
-        self.send_from = gmailconf['from email address']
-        
-        # get the login credentials from storage, or generate them
-        self.credentials = self.get_credentials()
+            self.send_to = gmailconf['to email address']
+            self.send_from = gmailconf['from email address']
 
-        # create the service object
-        http = self.credentials.authorize(httplib2.Http())
-        self.service = discovery.build('gmail', 'v1', http=http)
+            # get the login credentials from storage, or generate them
+            self.credentials = self.get_credentials()
+
+            # create the service object
+            http = self.credentials.authorize(httplib2.Http())
+            self.service = discovery.build('gmail', 'v1', http=http)
 
     
 
@@ -147,9 +150,11 @@ class Gmail(object):
         raise
 
     def create_and_send_message(self,subject,message_text):
-
         """ combine create and send message methods """
-
+        if self.service is None:
+            # not configured, don't do anything, jut reutn
+            return
+        
         msg = self.create_message(subject,message_text)
         self.send_message(msg)
 

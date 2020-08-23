@@ -89,6 +89,7 @@ if __name__=='__main__':
     except KeyError:
         # gmail not configured
         log.info('gmail not configured, emails will not be sent')
+        gmailconf = None
 
     try:
         gm = Gmail(gmailconf)
@@ -192,11 +193,13 @@ if __name__=='__main__':
                   sr.reference.id_str
 
             msg += url + ' at ' + str(sr.match_loc) + '\n\n'
-            
+
+        log.info(msg)
         gm.create_and_send_message('photomongo results to review',\
                                    msg)
     else:
         msg = 'Photomongo found no results in ' + str(totlen) + ' tweets.'
+        log.info(msg)
         gm.create_and_send_message('photomongo no results',\
                                    msg)
 
