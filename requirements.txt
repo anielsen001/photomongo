@@ -5,4 +5,4 @@ tweepy==3.7.0
 Pillow==9.0.1
 google_api_python_client==1.7.8
 face_recognition==1.2.3
-numpy==1.21.0
+numpy==1.22.0
